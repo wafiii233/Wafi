@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu Soto Ayam & Minuman</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #fff8e1;
+    }
+    h2 { color: #d17b00; }
+    label, select, input {
+      display: block;
+      margin: 10px 0;
+    }
+    button {
+      background: #25d366;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #qrcode {
+      margin-top: 20px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+
+  <h2>Menu Soto Ayam & Minuman</h2>
+
+  <form id="orderForm">
+    <label>Nama Anda:</label>
+    <input type="text" id="nama" placeholder="Masukkan Nama" required>
+
+    <label>Soto:</label>
+    <select id="soto">
+      <option value="Soto Biasa - 13000">Soto Biasa - Rp13.000</option>
+      <option value="Soto Kulit - 15000">Soto Kulit - Rp15.000</option>
+      <option value="Soto Jeroan - 20000">Soto Jeroan - Rp20.000</option>
+    </select>
+
+    <label>Minuman:</label>
+    <select id="minuman">
+      <option value="Esteh - 3000">Esteh - Rp3.000</option>
+      <option value="Tidak pesan">Tidak pesan</option>
+    </select>
+
+    <label>Jumlah Porsi:</label>
+    <input type="number" id="jumlah" value="1" min="1" required>
+
+    <button type="submit">Kirim Pesanan via WhatsApp</button>
+  </form>
+
+  <div id="qrcode"></div>
+
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      let nama = document.getElementById("nama").value;
+      let soto = document.getElementById("soto").value;
+      let minum = document.getElementById("minuman").value;
+      let jumlah = document.getElementById("jumlah").value;
+
+      if (!nama) {
+        alert("Nama harus diisi!");
+        return;
+      }
+
+      let pesan = `Halo! Saya ${nama}, ingin pesan:\n- ${soto}\n- ${minum}\nJumlah: ${jumlah} porsi`;
+
+      let nomorWa = "6283111846338"; // ganti dengan nomor WA tujuan (tanpa +)
+      let url = `https://wa.me/${nomorWa}?text=${encodeURIComponent(pesan)}`;
+
+      // Buat QR Code
+      QRCode.toCanvas(document.getElementById("qrcode"), url, function (error) {
+        if (error) console.error(error);
+      });
+
+      // Buka WhatsApp
+      window.open(url, "_blank");
+    });
+  </script>
+
+</body>
+</html>
